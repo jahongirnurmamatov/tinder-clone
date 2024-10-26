@@ -5,13 +5,16 @@ import userRouter from "./routes/userRoutes.js";
 import matchRouter from "./routes/matchRoutes.js";
 import messagesRouter from "./routes/messagesRoutes.js";
 import { connectDb } from "./config/db.js";
+
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// middlewares
 app.use(express.json());
 
+// routes
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/matches", matchRouter);
