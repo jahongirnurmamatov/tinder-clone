@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import bcyrptjs from 'bcryptjs'
+import bcyrptjs from 'bcryptjs';
 
 const userSchema = mongoose.Schema({
     name: {

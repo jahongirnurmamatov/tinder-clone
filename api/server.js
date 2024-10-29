@@ -6,7 +6,7 @@ import matchRouter from "./routes/matchRoutes.js";
 import messagesRouter from "./routes/messagesRoutes.js";
 import { connectDb } from "./config/db.js";
 import cors from 'cors';
-
+import cookieParser from "cookie-parser";
 
 
 dotenv.config();
@@ -22,6 +22,7 @@ app.use(cors(
     credentials:true
   }
 ));
+app.use(cookieParser());
 
 // routes
 app.use("/api/auth", authRouter);

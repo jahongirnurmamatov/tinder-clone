@@ -10,6 +10,7 @@ export const protecRoute = async (req, res, next) => {
       });
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
     if (!decoded) {
       return res.status(401).json({
         success: false,
@@ -18,6 +19,7 @@ export const protecRoute = async (req, res, next) => {
     }
     const currentUser = await User.findById(decoded.id).select("-password");
     req.user = currentUser;
+    next();
   } catch (error) {
     console.log(error.message);
     return res
