@@ -5,6 +5,7 @@ import AuthPage from "./pages/AuthPage";
 import ProfilePage from "./pages/ProfilePage";
 import ChatPage from "./pages/ChatPage";
 import { useAuthStore } from "./store/useAuthStore";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
   const {checkAuth} = useAuthStore();
@@ -20,6 +21,7 @@ const App = () => {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/chat/:id" element={<ChatPage />} />
       </Routes>
+      <Toaster />
     </div>
   );
 };

@@ -22,12 +22,12 @@ const userSchema = mongoose.Schema({
     gender:{
         type: String,
         required: true,
-        enum: ['Male', 'Female'],
+        enum: ['male', 'female'],
     },
     genderPreference:{
         type: String,
         required: true,
-        enum: ['Male', 'Female', 'Both']
+        enum: ['male', 'female', 'both']
     },
     bio:{
         type: String,
