@@ -1,8 +1,11 @@
 import React from 'react'
+import Header from '../componenets/Header'
 
 const ProfilePage = () => {
   return (
-    <div>ProfilePage</div>
+    <div className='min-h-screen bg-gray-50 flex flex-col '>
+      <Header />
+    </div>
   )
 }
 
