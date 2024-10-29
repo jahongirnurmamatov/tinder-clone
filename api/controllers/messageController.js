@@ -22,5 +22,22 @@ export const sendMessage = async (req, res) => {
 
 export const getConversation = async (req, res) => {
   try {
-  } catch (error) {}
+    const {userId} = req.params;
+    const messages = await Message.find({
+        $or:[
+            {sender:userId,receiver:req.user._id},
+            {sender:req.user._id,receiver:userId}
+        ]
+    }).sort({createdAt:1});
+    res.status(200).json({
+      success: true,
+      messages
+    });
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+    });
+  }
 };
