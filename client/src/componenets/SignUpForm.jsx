@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useAuthStore } from "../store/useAuthStore";
 
 const SignUpForm = () => {
   const [name, setName] = useState("");
@@ -7,6 +8,9 @@ const SignUpForm = () => {
   const [age, setAge] = useState(null);
   const [gender, setGender] = useState("");
   const [genderPreference, setGenderPreference] = useState("");
+
+  const {authUsername,authUserLastName}=useAuthStore()
+  console.log(authUserLastName,authUsername)
 
   const loading = false;
   const signup = () => {

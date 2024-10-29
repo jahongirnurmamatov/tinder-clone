@@ -5,6 +5,7 @@ import SignUpForm from "../componenets/SignUpForm";
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
 
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-500 to-pink-500 p-4">
       <div className="w-full max-w-md">
