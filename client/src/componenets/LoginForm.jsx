@@ -1,14 +1,22 @@
 import React, { useState } from "react";
 import { useStore } from "zustand";
+import { useAuthStore } from "../store/useAuthStore";
 
 const LoginForm = () => {
+  const { login } = useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const loading = false;
 
   return (
-    <form className="space-y-6">
+    <form
+      className="space-y-6"
+      onSubmit={(e) => {
+        e.preventDefault();
+        login({ email, password });
+      }}
+    >
       <div>
         <label
           htmlFor="email"
@@ -45,7 +53,7 @@ const LoginForm = () => {
             autoComplete="password"
             required
             value={password}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 
            focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
           />
@@ -61,7 +69,7 @@ const LoginForm = () => {
       }
       `}
       >
-        {loading ? 'Signing in...' : 'Submit'}
+        {loading ? "Signing in..." : "Submit"}
       </button>
     </form>
   );
