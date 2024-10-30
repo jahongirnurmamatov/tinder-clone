@@ -7,12 +7,17 @@ import messagesRouter from "./routes/messagesRoutes.js";
 import { connectDb } from "./config/db.js";
 import cors from 'cors';
 import cookieParser from "cookie-parser";
+import {createServer} from 'http';
+import { intializeSocket } from "./socket/socket.server.js";
 
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const httpServer = createServer(app);
+
+intializeSocket(httpServer)
 
 // middlewares
 app.use(express.json());
@@ -30,7 +35,7 @@ app.use("/api/users", userRouter);
 app.use("/api/matches", matchRouter);
 app.use("/api/messages", messagesRouter);
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log("Server is running on port" + PORT);
   connectDb();
 });
