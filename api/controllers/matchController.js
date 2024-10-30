@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import { getConnectedUsers, getIO } from "../socket/socket.server.js";
 
 export const swipeRight = async (req, res) => {
   try {
@@ -21,9 +22,29 @@ export const swipeRight = async (req, res) => {
         likedUser.matches.push(currentUser._id);
       }
       await Promise.all([currentUser.save(), likedUser.save()]);
-      // TO DO SENT NOTIFICATION IF IT IS A MATCH => SOCKET IO
+    
+      // send notification to both users in real time with socket.io
+      const connectedUsers = getConnectedUsers();
+      const io = getIO();
+      const likedUserSocketId = connectedUsers.get(likedUser._id);
+
+      if (likedUserSocketId) {
+        io.to(likedUserSocketId).emit("newMatch", {
+          _id:currentUser._id,
+          name:currentUser.name,
+          image:currentUser.image
+        });
+      }
+      const currentUserSocketId = connectedUsers.get(currentUser._id);
+      if(currentUserSocketId){
+        io.to(currentUserSocketId).emit("newMatch", {
+          _id:likedUser._id,
+          name:likedUser.name,
+          image:likedUser.image
+        });
+      }
     }
-    res.status(200).json({succes:true,user:currentUser});
+    res.status(200).json({ succes: true, user: currentUser });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ succes: false, message: "Internal server error" });
@@ -32,9 +53,8 @@ export const swipeRight = async (req, res) => {
 
 export const swipeLeft = async (req, res) => {
   try {
-   
     const { dislikedUserId } = req.params;
-    console.log(dislikedUserId)
+    console.log(dislikedUserId);
     const currentUser = await User.findById(req.user._id);
 
     // Ensure the disliked user ID is added to the dislikes array

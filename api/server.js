@@ -8,7 +8,7 @@ import { connectDb } from "./config/db.js";
 import cors from 'cors';
 import cookieParser from "cookie-parser";
 import {createServer} from 'http';
-import { intializeSocket } from "./socket/socket.server.js";
+import { initializeSocket } from "./socket/socket.server.js";
 
 
 dotenv.config();
@@ -17,7 +17,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const httpServer = createServer(app);
 
-intializeSocket(httpServer)
+initializeSocket(httpServer)
 
 // middlewares
 app.use(express.json());

@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import { toast } from "react-hot-toast";
 import { set } from "mongoose";
+import { disconnectSocket, intializeSocket } from "../socket/socket.client.js";
 
 
 export const useAuthStore = create((set) => ({
@@ -16,6 +17,7 @@ export const useAuthStore = create((set) => ({
       console.log(data);
       if (data.user) {
         set({ authUser: data.user });
+        intializeSocket(data.user._id)
         toast.success("Account created successfully");
       } else {
         toast.error("User data not returned correctly.");
@@ -33,6 +35,7 @@ export const useAuthStore = create((set) => ({
       const res = await axiosInstance.post('/auth/login',loginData);
       if(res.data.user){
         set({authUser:res.data.user});
+        intializeSocket(res.data.user._id)
         toast.success("Logged in successfully");
       }
     } catch (error) {
@@ -47,6 +50,7 @@ export const useAuthStore = create((set) => ({
     try {
       const res = await axiosInstance.get("/auth/me");
       set({ authUser: res.data.user });
+      intializeSocket(res.data.user._id);
     } catch (error) {
       set({ authUser: null });
     } finally {
@@ -56,6 +60,7 @@ export const useAuthStore = create((set) => ({
   logout: async () => {
     try {
       const res = await axiosInstance.post("/auth/logout");
+      disconnectSocket();
       if (res.status === 200) {
         set({ authUser: null });
       }
