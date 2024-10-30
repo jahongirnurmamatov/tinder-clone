@@ -6,6 +6,7 @@ export const updateProfile = async (req, res) => {
     const { image, ...otherData } = req.body;
     let updatedData = otherData;
     if (image) {
+      
       if (image.startsWith("data:image")) {
         try {
           const uploadResponse = await cloudinary.uploader.upload(image);
@@ -18,7 +19,7 @@ export const updateProfile = async (req, res) => {
         }
       }
     }
-    const updatedUser = await User.findbyIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
       updatedData,
       { new: true }
