@@ -5,7 +5,7 @@ import { useMatchStore } from "../store/useMatchStore";
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
 
-  const {getMatches,matches,loading} =useMatchStore();
+  const {getMatches,matches,isLoadingMatches} =useMatchStore();
 
   useEffect(()=>{
     getMatches();
@@ -37,7 +37,7 @@ const Sidebar = () => {
         </div>
 
         <div className="flex-grow overflow-y-auto p-4 z-10 relative">
-            {loading ? <LoadingState /> : matches.length===0 ? <NoMatchesFound /> : 
+            {isLoadingMatches ? <LoadingState /> : matches.length===0 ? <NoMatchesFound /> : 
             matches.map((match)=>(
                 <Link key={match._id} to={`/chat/${match._id}`} >
                     <div className="flex items-center mb-4 cursor-pointer hover:bg-pink-50 p-2 rounded-lg transition-colors duration-300">

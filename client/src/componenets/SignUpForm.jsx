@@ -197,14 +197,14 @@ const SignUpForm = () => {
             <input
               type="radio"
               id="prefer-both"
-              value={"bothr"}
-              checked={genderPreference === "bothr"}
+              value={"both"}
+              checked={genderPreference === "both"}
               name="gender-preference"
               onChange={(e) => setGenderPreference(e.target.value)}
               className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300"
             />
             <label
-              htmlFor="preder-bothr"
+              htmlFor="prefer-both"
               className="ml-2 block text-sm text-gray-900"
             >
               Both
