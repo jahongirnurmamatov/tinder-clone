@@ -20,7 +20,7 @@ const HomePage = () => {
       <Sidebar />
       <div className="flex-grow fkex flex-col overflow-hidden">
         <Header />
-        <main className="flex-grow flex flex-col gap-10 justify-center items-center p-4 overflow-hidden relative">
+        <main className="flex-grow min-h-screen flex flex-col gap-10 justify-center items-center p-4 overflow-hidden relative">
           {userProfiles.length > 0 && !isLoadingProfiles && (
             <>
               <SwipeArea />

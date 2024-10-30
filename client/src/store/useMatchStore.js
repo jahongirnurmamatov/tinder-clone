@@ -41,7 +41,7 @@ export const useMatchStore = create((set) => ({
   },
   swipeLeft: async (user) => {
     try {
-      await axiosInstance.post("/matches//swipe-left/" + user._id);
+      await axiosInstance.post("/matches/swipe-left/" + user._id);
       set({ swipeFeedback: "passed" });
     } catch (error) {
       console.log(error)
@@ -50,9 +50,9 @@ export const useMatchStore = create((set) => ({
       setTimeout(()=>set({swipeFeedback:null}),1500);
     }
   },
-  swipeRigth: async (user) => {
+  swipeRight: async (user) => {
     try {
-      await axiosInstance.post("/matches//swipe-rigth/" + user._id);
+      await axiosInstance.post("/matches/swipe-right/" + user._id);
       set({ swipeFeedback: "liked" });
     } catch (error) {
       console.log(error)
