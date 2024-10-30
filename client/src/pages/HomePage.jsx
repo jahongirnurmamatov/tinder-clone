@@ -4,6 +4,8 @@ import Sidebar from "../componenets/Sidebar";
 import { useMatchStore } from "../store/useMatchStore";
 import Header from "../componenets/Header";
 import { Frown } from "lucide-react";
+import SwipeArea from "../componenets/SwipeArea";
+import SwipeFeedback from "../componenets/SwipeFeedback";
 
 const HomePage = () => {
   const { logout } = useAuthStore();
@@ -19,7 +21,12 @@ const HomePage = () => {
       <div className="flex-grow fkex flex-col overflow-hidden">
         <Header />
         <main className="flex-grow flex flex-col gap-10 justify-center items-center p-4 overflow-hidden relative">
-          {userProfiles.length > 0 && !isLoadingProfiles && <></>}
+          {userProfiles.length > 0 && !isLoadingProfiles && (
+            <>
+              <SwipeArea />
+              <SwipeFeedback />
+            </>
+          )}
           {userProfiles.length === 0 && !isLoadingProfiles && (
             <NoMoreProfiles />
           )}
