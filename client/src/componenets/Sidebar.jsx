@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { X, Loader, Heart, MessageCircle } from "lucide-react";
 import {Link} from 'react-router-dom';
+import { useMatchStore } from "../store/useMatchStore";
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
-  const loading =false;
-  const matches = [{_id:'1',name:'shubham',age:22}];
+
+  const {getMatches,matches,loading} =useMatchStore();
+
+  useEffect(()=>{
+    getMatches();
+  },[getMatches])
 
   const toggleSidebar = () => setIsOpen(!isOpen);
 
