@@ -8,11 +8,25 @@ import SwipeArea from "../componenets/SwipeArea";
 import SwipeFeedback from "../componenets/SwipeFeedback";
 
 const HomePage = () => {
-  const { logout } = useAuthStore();
-  const { userProfiles, getUserProfiles, isLoadingProfiles } = useMatchStore();
+  const { logout,authUser } = useAuthStore();
+  const {
+    userProfiles,
+    getUserProfiles,
+    isLoadingProfiles,
+    subscribeToNewMatches,
+    unsubscribeToNewMatches,
+  } = useMatchStore();
+
   useEffect(() => {
     getUserProfiles();
   }, [getUserProfiles]);
+
+  useEffect(()=>{
+    authUser && subscribeToNewMatches();
+    return ()=>{
+      unsubscribeToNewMatches()
+    }
+  },[subscribeToNewMatches,unsubscribeToNewMatches, authUser])
 
   console.log(userProfiles);
   return (

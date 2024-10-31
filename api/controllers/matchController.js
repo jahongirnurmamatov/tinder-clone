@@ -3,52 +3,65 @@ import { getConnectedUsers, getIO } from "../socket/socket.server.js";
 
 export const swipeRight = async (req, res) => {
   try {
-    const { likedUserId } = req.params;
-    const currentUser = await User.findById(req.user._id);
-    const likedUser = await User.findById(likedUserId);
+		const { likedUserId } = req.params;
+		const currentUser = await User.findById(req.user.id);
+		const likedUser = await User.findById(likedUserId);
 
-    if (!likedUser) {
-      return res.status(404).json({ message: "user not found" });
-    }
-    if (!currentUser.likes.includes(likedUser._id)) {
-      currentUser.likes.push(likedUser._id);
-      await currentUser.save();
-    }
-    if (likedUser.likes.includes(currentUser._id)) {
-      if (!currentUser.matches.includes(likedUser._id)) {
-        currentUser.matches.push(likedUser._id);
-      }
-      if (!likedUser.matches.includes(currentUser._id)) {
-        likedUser.matches.push(currentUser._id);
-      }
-      await Promise.all([currentUser.save(), likedUser.save()]);
-    
-      // send notification to both users in real time with socket.io
-      const connectedUsers = getConnectedUsers();
-      const io = getIO();
-      const likedUserSocketId = connectedUsers.get(likedUser._id);
+		if (!likedUser) {
+			return res.status(404).json({
+				success: false,
+				message: "User not found",
+			});
+		}
 
-      if (likedUserSocketId) {
-        io.to(likedUserSocketId).emit("newMatch", {
-          _id:currentUser._id,
-          name:currentUser.name,
-          image:currentUser.image
-        });
-      }
-      const currentUserSocketId = connectedUsers.get(currentUser._id);
-      if(currentUserSocketId){
-        io.to(currentUserSocketId).emit("newMatch", {
-          _id:likedUser._id,
-          name:likedUser.name,
-          image:likedUser.image
-        });
-      }
-    }
-    res.status(200).json({ succes: true, user: currentUser });
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ succes: false, message: "Internal server error" });
-  }
+		if (!currentUser.likes.includes(likedUserId)) {
+			currentUser.likes.push(likedUserId);
+			await currentUser.save();
+
+			// if the other user already liked us, it's a match, so let's update both users
+			if (likedUser.likes.includes(currentUser.id)) {
+				currentUser.matches.push(likedUserId);
+				likedUser.matches.push(currentUser.id);
+
+				await Promise.all([await currentUser.save(), await likedUser.save()]);
+
+				// send notification in real-time with socket.io
+				const connectedUsers = getConnectedUsers();
+				const io = getIO();
+
+				const likedUserSocketId = connectedUsers.get(likedUserId);
+
+				if (likedUserSocketId) {
+					io.to(likedUserSocketId).emit("newMatch", {
+						_id: currentUser._id,
+						name: currentUser.name,
+						image: currentUser.image,
+					});
+				}
+
+				const currentSocketId = connectedUsers.get(currentUser._id.toString());
+				if (currentSocketId) {
+					io.to(currentSocketId).emit("newMatch", {
+						_id: likedUser._id,
+						name: likedUser.name,
+						image: likedUser.image,
+					});
+				}
+			}
+		}
+
+		res.status(200).json({
+			success: true,
+			user: currentUser,
+		});
+	} catch (error) {
+		console.log("Error in swipeRight: ", error);
+
+		res.status(500).json({
+			success: false,
+			message: "Internal server error",
+		});
+	}
 };
 
 export const swipeLeft = async (req, res) => {
@@ -76,7 +89,10 @@ export const getMatches = async (req, res) => {
       "matches",
       "name image"
     );
-    res.status(200).json(user.matches);
+    res.status(200).json({
+			success: true,
+			matches: user.matches,
+		});
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ succes: false, message: "Internal server error" });

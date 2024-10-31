@@ -4,10 +4,10 @@ import { getMatches, getsUserprofiles, swipeLeft, swipeRight } from "../controll
 
 const matchRouter = express.Router();
 
+matchRouter.get('/all-matches',protecRoute,getMatches);
 matchRouter.post('/swipe-right/:likedUserId',protecRoute,swipeRight);
 matchRouter.post('/swipe-left/:dislikedUserId',protecRoute,swipeLeft);
 
-matchRouter.get('/',protecRoute,getMatches);
 matchRouter.get('/user-profiles',protecRoute,getsUserprofiles);
 
 export default matchRouter;
