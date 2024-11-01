@@ -10,15 +10,21 @@ import MessageInput from "../componenets/MessageInput";
 // scrollbar-thin scrollbar-thumb-pink-300 scrollbar-track-gray-100
 const ChatPage = () => {
   const { getMatches, matches, isLoadingMatches } = useMatchStore();
-  const { messages } = useMessageStore();
+  const { messages, getMessages,subsribeToMessages,unsubscribeToMessages } = useMessageStore();
   const { authUser } = useAuthStore();
   const { id } = useParams();
 
   useEffect(() => {
-    if (authUser) {
+    if (authUser && id) {
       getMatches();
+      getMessages(id);
+      subsribeToMessages()
     }
-  }, [getMatches, authUser]);
+    return ()=>{
+      unsubscribeToMessages()
+    };
+
+  }, [getMatches, authUser,getMessages]);
   const match = matches?.find((m) => m._id === id);
 
   if(isLoadingMatches) return <LoadingMessagesUI />

@@ -7,7 +7,7 @@ const messagesRouter = express.Router();
 messagesRouter.use(protecRoute);
 
 messagesRouter.post('/send',sendMessage);
-messagesRouter.post('/conversation/:userId',getConversation);
+messagesRouter.get('/conversation/:userId',getConversation);
 
 
 export default messagesRouter;

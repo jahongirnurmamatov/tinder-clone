@@ -9,7 +9,7 @@ export const useMessageStore = create((set)=>({
     loading:true,
     sendMessage:async(receiverId,content)=>{
         try {
-            set(state=>({messages:[...state.messages,{sender:useAuthStore.getState().authUser._id,receiver:receiverId,content }]}));
+            set(state=>({messages:[...state.messages,{_id:Date.now(),sender:useAuthStore.getState().authUser._id,receiver:receiverId,content }]}));
             const {data} = await axiosInstance.post('/messages/send',{receiverId, content});
 
         } catch (error) {
@@ -17,7 +17,7 @@ export const useMessageStore = create((set)=>({
             toast.error(error.message);
         }
     },
-    getMessage:async(userId)=>{
+    getMessages:async(userId)=>{
         try {
             set({loading:true})
             const {data} = await axiosInstance.get('/messages/conversation/'+userId);
@@ -32,10 +32,10 @@ export const useMessageStore = create((set)=>({
             set({loading:false});
         }
     },
-    subscbribeToMessages: (userId)=>{
+    subsribeToMessages: (userId)=>{
         try {
             const socket = getSocket();
-            socket("newMessage",(message)=>{
+            socket.on("newMessage",(message)=>{
                 set((state)=>({messages:[...state.messages,message]}));
             })
         } catch (error) {
